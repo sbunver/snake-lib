@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.12)
+project(snake-lib)
+add_subdirectory(googletest-master/googletest)
+include_directories(googletest-master/googletest/include)
+
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage -std=c++17")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+add_executable(SL-UnitTests SnakeUnitTests.cpp Snake.cpp)
+target_link_libraries(SL-UnitTests PRIVATE gtest)
