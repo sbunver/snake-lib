@@ -7,6 +7,8 @@ TEST(SLUnitTests, INITIAL_SNAKE)
     s.printSnake();
     s.Step();
     s.printSnake();
+    s.Step();
+    s.printSnake();
 }
 
 int main(int argc, char* argv[])

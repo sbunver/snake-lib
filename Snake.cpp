@@ -124,6 +124,33 @@ bool Snake::isNextStepValid(SnakePoint& newPoint)
     return result;
 }
 
+SNAKE_INTERNAL_RET Snake::deleteLastNode()
+{
+    SNAKE_INTERNAL_RET ret = SNAKE_INTERNAL_RET_UNDEFINED;
+    
+    if(this->head != 0)
+    {
+        SnakeNode* index = this->head;
+        
+        while(index != 0)
+        {
+            if(index->next->next == 0)
+            {
+                delete index->next;
+                index->next = 0;
+                ret = SNAKE_INTERNAL_RET_SUCCESS;
+            }
+            index = index->next;
+        }
+    }
+    else
+    {
+        ret = SNAKE_INTERNAL_RET_NULL_HEAD;
+    }
+
+    return ret;    
+}
+
 SNAKE_RET Snake::Step()
 {
     SNAKE_RET ret = SNAKE_RET_UNDEFINED;
@@ -140,7 +167,17 @@ SNAKE_RET Snake::Step()
             internalRet = addSnakeNodeToHead(newPoint);
             if(internalRet == SNAKE_INTERNAL_RET_SUCCESS)
             {
-                // TODO shift all snake parT OF linked list
+                // TODO check if new point is a mouse, if mouse no node will be deleted
+                internalRet = deleteLastNode();
+                if(internalRet == SNAKE_INTERNAL_RET_SUCCESS)
+                {
+                    //
+                }
+                else
+                {
+                    ret = SNAKE_RET_UNDEFINED;
+                    // TODO Report internal error to a function
+                }    
             }
             else
             {
@@ -170,4 +207,5 @@ void Snake::printSnake()
         std::cout<<index->position.posX<<" "<<index->position.posY<<std::endl;
         index = index->next;
     }
+    std::cout<<std::endl;
 }

@@ -49,6 +49,7 @@ class Snake
     bool isNextStepValid(SnakePoint& newPoint);
     SNAKE_INTERNAL_RET calcNextStep(SnakePoint& p);
     bool isBiteItself(const SnakePoint& searchPoint);
+    SNAKE_INTERNAL_RET deleteLastNode();
     SnakeNode* head;
     SnakeNode* tail;
     SNAKE_MOVE moveDirection;
