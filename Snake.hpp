@@ -1,6 +1,22 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 
+enum SNAKE_RET
+{
+    SNAKE_RET_UNDEFINED,
+    SNAKE_RET_GAME_OVER,
+    SNAKE_RET_CONTINUE
+};
+
+enum SNAKE_INTERNAL_RET
+{   
+    SNAKE_INTERNAL_RET_UNDEFINED,
+    SNAKE_INTERNAL_RET_NULL_HEAD,
+    SNAKE_INTERNAL_RET_NEG_POS,
+    SNAKE_INTERNAL_RET_NO_MEM,
+    SNAKE_INTERNAL_RET_SUCCESS
+};
+
 enum SNAKE_MOVE
 {
     SNAKE_MOVE_UP,
@@ -26,12 +42,13 @@ class Snake
 {
     public:
     Snake(unsigned int gameSize);
-    void Step();
+    SNAKE_RET Step();
     void printSnake();
     private:
-    void addSnakeNodeToHead(SnakePoint& point);
+    SNAKE_INTERNAL_RET addSnakeNodeToHead(SnakePoint& point);
     bool isNextStepValid(SnakePoint& newPoint);
-    void calcNextStep(SnakePoint& p);
+    SNAKE_INTERNAL_RET calcNextStep(SnakePoint& p);
+    bool isBiteItself(const SnakePoint& searchPoint);
     SnakeNode* head;
     SnakeNode* tail;
     SNAKE_MOVE moveDirection;

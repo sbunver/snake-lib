@@ -23,50 +23,82 @@ Snake::Snake(unsigned int gameSize)
     
     addSnakeNodeToHead(p);
     
-    p.posX = 1;
-    p.posY = 0;
+    p.posX = 0;
+    p.posY = 1;
     addSnakeNodeToHead(p);
     
-    p.posX = 2;
-    p.posY = 0;
+    p.posX = 0;
+    p.posY = 2;
     addSnakeNodeToHead(p); 
 }
 
-void Snake::addSnakeNodeToHead(SnakePoint& point)
+SNAKE_INTERNAL_RET Snake::addSnakeNodeToHead(SnakePoint& point)
 {
+    SNAKE_INTERNAL_RET ret = SNAKE_INTERNAL_RET_UNDEFINED;
     SnakeNode* node = new SnakeNode;
-    node->position.posX = point.posX;
-    node->position.posY = point.posY;
 
-    if(this->head == 0)
+    if(node != 0)
     {
-        this->head = node;
-        this->tail = node;
+        node->position.posX = point.posX;
+        node->position.posY = point.posY;
+
+        if(this->head == 0)
+        {
+            this->head = node;
+            this->tail = node; // TODO check for tail is need?
+        }
+        else
+        {
+            node->next = this->head;
+            this->head = node;
+        }
+        
+        ret = SNAKE_INTERNAL_RET_SUCCESS;
     }
     else
     {
-        node->next = this->head;
-        this->head = node;
+        ret = SNAKE_INTERNAL_RET_NO_MEM;
     }
 
-    return;
+    return ret;
 }
 
-void Snake::calcNextStep(SnakePoint& p)
+SNAKE_INTERNAL_RET Snake::calcNextStep(SnakePoint& p)
 {  
-    SnakePoint currentMove = moves[this->moveDirection];
+    SNAKE_INTERNAL_RET ret = SNAKE_INTERNAL_RET_UNDEFINED;
     
     if(this->head != 0)
     {
+        SnakePoint currentMove = moves[this->moveDirection];
         p.posX = this->head->position.posX + currentMove.posX;
         p.posY = this->head->position.posY + currentMove.posY;
+        ret = SNAKE_INTERNAL_RET_SUCCESS;
     }
     else
     {
-        // TODO log for null head
+        ret = SNAKE_INTERNAL_RET_NULL_HEAD;
     }    
     
-    return;
+    return ret;
+}
+
+bool Snake::isBiteItself(const SnakePoint& searchPoint)
+{
+    bool ret = false;
+
+    SnakeNode* index = this->head;
+
+    while(index != 0)
+    {
+        if(index->position.posX == searchPoint.posX &&
+            index->position.posY == searchPoint.posY)
+        {
+            ret = true;
+        }
+        index = index->next;
+    }
+
+    return ret;
 }
 
 bool Snake::isNextStepValid(SnakePoint& newPoint)
@@ -75,7 +107,14 @@ bool Snake::isNextStepValid(SnakePoint& newPoint)
    
     if(newPoint.posX <= this->size && newPoint.posY <= this->size)
     {
-        result = true;
+        if(isBiteItself(newPoint) == false)
+        {
+            result = true;
+        }
+        else
+        {
+            result = false;
+        }    
     }
     else
     {
@@ -85,17 +124,42 @@ bool Snake::isNextStepValid(SnakePoint& newPoint)
     return result;
 }
 
-void Snake::Step()
+SNAKE_RET Snake::Step()
 {
+    SNAKE_RET ret = SNAKE_RET_UNDEFINED;
+    SNAKE_INTERNAL_RET internalRet = SNAKE_INTERNAL_RET_UNDEFINED;
     SnakePoint newPoint;
+
     memset(&newPoint, 0, sizeof(SnakePoint));
+    internalRet = calcNextStep(newPoint);
     
-    calcNextStep(newPoint); // TODO get return value as error
-    if(isNextStepValid(newPoint))
-    {   
-        // TODO add new head cell to head of snake
-        // TODO shift all snake parT OF linked list
+    if(internalRet == SNAKE_INTERNAL_RET_SUCCESS)
+    { 
+        if(isNextStepValid(newPoint))
+        {
+            internalRet = addSnakeNodeToHead(newPoint);
+            if(internalRet == SNAKE_INTERNAL_RET_SUCCESS)
+            {
+                // TODO shift all snake parT OF linked list
+            }
+            else
+            {
+                ret = SNAKE_RET_UNDEFINED;
+                // TODO Report internal error to a function
+            }        
+        }
+        else
+        {
+            ret = SNAKE_RET_GAME_OVER;
+        }
     }
+    else
+    {
+        ret = SNAKE_RET_UNDEFINED;
+        // TODO Report internal error to a function
+    }
+
+    return ret;
 }
 
 void Snake::printSnake()

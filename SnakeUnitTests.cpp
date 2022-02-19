@@ -5,6 +5,8 @@ TEST(SLUnitTests, INITIAL_SNAKE)
 {
     Snake s(10);
     s.printSnake();
+    s.Step();
+    s.printSnake();
 }
 
 int main(int argc, char* argv[])
