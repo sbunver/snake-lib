@@ -3,7 +3,7 @@
 
 TEST(SLUnitTests, INITIAL_SNAKE)
 {
-    Snake s;
+    Snake s(10);
     s.printSnake();
 }
 

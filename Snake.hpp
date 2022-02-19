@@ -25,13 +25,16 @@ struct SnakeNode
 class Snake
 {
     public:
-    Snake();
+    Snake(unsigned int gameSize);
     void Step();
     void printSnake();
     private:
     void addSnakeNodeToHead(SnakePoint& point);
+    bool isNextStepValid();
     SnakeNode* head;
     SnakeNode* tail;
+    SNAKE_MOVE moveDirection;
+    unsigned int size;
 };
 
 #endif

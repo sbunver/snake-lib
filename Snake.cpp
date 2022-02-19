@@ -9,10 +9,12 @@ SnakePoint moves[SNAKE_MOVE_COUNT] =
     {0, -1}
 };
     
-Snake::Snake()
+Snake::Snake(unsigned int gameSize)
 {
     this->head = nullptr;
     this->tail = nullptr;
+    this->moveDirection = SNAKE_MOVE_RIGHT;
+    this->size = gameSize;
     
     // Add first 3 body part of snake
     SnakePoint p;
@@ -50,12 +52,42 @@ void Snake::addSnakeNodeToHead(SnakePoint& point)
     return;
 }
 
-void Step()
+bool Snake::isNextStepValid()
 {
-    // TODO calculate next head cell according to move direction
-    // TODO if next head cell is valid
-    // TODO add new head cell to head of snake
-    // TODO shift all snake parT OF linked list
+    SnakePoint newPoint;
+    SnakePoint currentMove = moves[this->moveDirection];
+    SnakeNode* index = this->head;
+    bool result = false;
+
+    if(head != 0)
+    {
+        newPoint.posX = this->head->position.posX + currentMove.posX;
+        newPoint.posY = this->head->position.posY + currentMove.posY;
+        
+        if(newPoint.posX <= this->size && newPoint.posY <= this->size)
+        {
+            result = true;
+        }
+        else
+        {
+            result = false;
+        }
+    }
+    else
+    {
+        // TODO log for null head
+    }
+
+    return result;
+}
+
+void Snake::Step()
+{
+    if(isNextStepValid())
+    {   
+        // TODO add new head cell to head of snake
+        // TODO shift all snake parT OF linked list
+    }
 }
 
 void Snake::printSnake()
