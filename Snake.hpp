@@ -50,10 +50,12 @@ class Snake
     SNAKE_INTERNAL_RET calcNextStep(SnakePoint& p);
     bool isBiteItself(const SnakePoint& searchPoint);
     SNAKE_INTERNAL_RET deleteLastNode();
+    bool isMouseEaten(const SnakePoint& newPoint);
     SnakeNode* head;
     SnakeNode* tail;
     SNAKE_MOVE moveDirection;
     unsigned int size;
+    SnakePoint mouse;
 };
 
 #endif

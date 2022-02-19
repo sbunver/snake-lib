@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 #include "Snake.hpp"
 
 SnakePoint moves[SNAKE_MOVE_COUNT] = 
@@ -15,6 +16,8 @@ Snake::Snake(unsigned int gameSize)
     this->tail = 0;
     this->moveDirection = SNAKE_MOVE_RIGHT;
     this->size = gameSize;
+    this->mouse.posX = 0;
+    this->mouse.posY = 5;
     
     // Add first 3 body part of snake
     SnakePoint p;
@@ -105,7 +108,7 @@ bool Snake::isNextStepValid(SnakePoint& newPoint)
 {
     bool result = false;
    
-    if(newPoint.posX <= this->size && newPoint.posY <= this->size)
+    if(newPoint.posX < this->size && newPoint.posY < this->size)
     {
         if(isBiteItself(newPoint) == false)
         {
@@ -151,6 +154,25 @@ SNAKE_INTERNAL_RET Snake::deleteLastNode()
     return ret;    
 }
 
+bool Snake::isMouseEaten(const SnakePoint& newPoint)
+{
+    bool ret = false;
+
+    if(newPoint.posX == this->mouse.posX &&
+        newPoint.posY == this->mouse.posY)
+    {
+        ret = true;
+        this->mouse.posX = rand() % size;
+        this->mouse.posY = rand() % size;
+    }
+    else
+    {
+        ret = false;
+    }
+
+    return ret;
+}
+
 SNAKE_RET Snake::Step()
 {
     SNAKE_RET ret = SNAKE_RET_UNDEFINED;
@@ -167,16 +189,23 @@ SNAKE_RET Snake::Step()
             internalRet = addSnakeNodeToHead(newPoint);
             if(internalRet == SNAKE_INTERNAL_RET_SUCCESS)
             {
-                // TODO check if new point is a mouse, if mouse no node will be deleted
-                internalRet = deleteLastNode();
-                if(internalRet == SNAKE_INTERNAL_RET_SUCCESS)
+                if(!isMouseEaten(newPoint))
                 {
-                    //
+                    internalRet = deleteLastNode();
+                    if(internalRet == SNAKE_INTERNAL_RET_SUCCESS)
+                    {
+                        ret = SNAKE_RET_CONTINUE;
+                    }
+                    else
+                    {
+                        ret = SNAKE_RET_UNDEFINED;
+                        // TODO Report internal error to a function
+                    }
                 }
                 else
                 {
-                    ret = SNAKE_RET_UNDEFINED;
-                    // TODO Report internal error to a function
+                    // No need to delete last node, mouse is eaten
+                    ret = SNAKE_RET_CONTINUE;
                 }    
             }
             else
@@ -207,5 +236,6 @@ void Snake::printSnake()
         std::cout<<index->position.posX<<" "<<index->position.posY<<std::endl;
         index = index->next;
     }
+    std::cout<<"Mouse : "<<this->mouse.posX<<" "<<this->mouse.posY<<std::endl;
     std::cout<<std::endl;
 }
