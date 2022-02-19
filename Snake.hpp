@@ -12,7 +12,7 @@ enum SNAKE_INTERNAL_RET
 {   
     SNAKE_INTERNAL_RET_UNDEFINED,
     SNAKE_INTERNAL_RET_NULL_HEAD,
-    SNAKE_INTERNAL_RET_NEG_POS,
+    SNAKE_INTERNAL_RET_NEG_POS, // TODO check negative positions
     SNAKE_INTERNAL_RET_NO_MEM,
     SNAKE_INTERNAL_RET_SUCCESS
 };
@@ -43,6 +43,7 @@ class Snake
     public:
     Snake(unsigned int gameSize);
     SNAKE_RET Step();
+    void SetSnakeDirection(SNAKE_MOVE newDirection);
     void printSnake();
     private:
     SNAKE_INTERNAL_RET addSnakeNodeToHead(SnakePoint& point);

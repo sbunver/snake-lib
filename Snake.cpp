@@ -228,6 +228,51 @@ SNAKE_RET Snake::Step()
     return ret;
 }
 
+void Snake::SetSnakeDirection(SNAKE_MOVE newDirection)
+{
+    switch(moveDirection)
+    {
+        case SNAKE_MOVE_UP:
+        {
+            if(newDirection != SNAKE_MOVE_DOWN)
+            {
+                moveDirection = newDirection;
+            }
+            break;
+        }
+        case SNAKE_MOVE_RIGHT:
+        {
+            if(newDirection != SNAKE_MOVE_LEFT)
+            {
+                moveDirection = newDirection;
+            }
+            break;
+        } 
+        case SNAKE_MOVE_DOWN:
+        {
+            if(newDirection != SNAKE_MOVE_UP)
+            {
+                moveDirection = newDirection;
+            }
+            break;
+        }
+        case SNAKE_MOVE_LEFT:
+        {
+            if(newDirection != SNAKE_MOVE_RIGHT)
+            {
+                moveDirection = newDirection;
+            }
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+
+    return; 
+}
+
 void Snake::printSnake()
 {
     SnakeNode* index = this->head;

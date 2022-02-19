@@ -11,6 +11,9 @@ TEST(SLUnitTests, INITIAL_SNAKE)
     s.printSnake();
     s.Step();
     s.printSnake();
+    s.SetSnakeDirection(SNAKE_MOVE_DOWN);
+    s.Step();
+    s.printSnake();
 }
 
 int main(int argc, char* argv[])
