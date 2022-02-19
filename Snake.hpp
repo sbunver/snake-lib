@@ -30,7 +30,8 @@ class Snake
     void printSnake();
     private:
     void addSnakeNodeToHead(SnakePoint& point);
-    bool isNextStepValid();
+    bool isNextStepValid(SnakePoint& newPoint);
+    void calcNextStep(SnakePoint& p);
     SnakeNode* head;
     SnakeNode* tail;
     SNAKE_MOVE moveDirection;

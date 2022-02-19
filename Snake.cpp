@@ -11,8 +11,8 @@ SnakePoint moves[SNAKE_MOVE_COUNT] =
     
 Snake::Snake(unsigned int gameSize)
 {
-    this->head = nullptr;
-    this->tail = nullptr;
+    this->head = 0;
+    this->tail = 0;
     this->moveDirection = SNAKE_MOVE_RIGHT;
     this->size = gameSize;
     
@@ -38,7 +38,7 @@ void Snake::addSnakeNodeToHead(SnakePoint& point)
     node->position.posX = point.posX;
     node->position.posY = point.posY;
 
-    if(this->head == nullptr)
+    if(this->head == 0)
     {
         this->head = node;
         this->tail = node;
@@ -52,30 +52,34 @@ void Snake::addSnakeNodeToHead(SnakePoint& point)
     return;
 }
 
-bool Snake::isNextStepValid()
-{
-    SnakePoint newPoint;
+void Snake::calcNextStep(SnakePoint& p)
+{  
     SnakePoint currentMove = moves[this->moveDirection];
-    SnakeNode* index = this->head;
-    bool result = false;
-
-    if(head != 0)
+    
+    if(this->head != 0)
     {
-        newPoint.posX = this->head->position.posX + currentMove.posX;
-        newPoint.posY = this->head->position.posY + currentMove.posY;
-        
-        if(newPoint.posX <= this->size && newPoint.posY <= this->size)
-        {
-            result = true;
-        }
-        else
-        {
-            result = false;
-        }
+        p.posX = this->head->position.posX + currentMove.posX;
+        p.posY = this->head->position.posY + currentMove.posY;
     }
     else
     {
         // TODO log for null head
+    }    
+    
+    return;
+}
+
+bool Snake::isNextStepValid(SnakePoint& newPoint)
+{
+    bool result = false;
+   
+    if(newPoint.posX <= this->size && newPoint.posY <= this->size)
+    {
+        result = true;
+    }
+    else
+    {
+        result = false;
     }
 
     return result;
@@ -83,7 +87,11 @@ bool Snake::isNextStepValid()
 
 void Snake::Step()
 {
-    if(isNextStepValid())
+    SnakePoint newPoint;
+    memset(&newPoint, 0, sizeof(SnakePoint));
+    
+    calcNextStep(newPoint); // TODO get return value as error
+    if(isNextStepValid(newPoint))
     {   
         // TODO add new head cell to head of snake
         // TODO shift all snake parT OF linked list
@@ -93,7 +101,7 @@ void Snake::Step()
 void Snake::printSnake()
 {
     SnakeNode* index = this->head;
-    while(index != nullptr)
+    while(index != 0)
     {
         std::cout<<index->position.posX<<" "<<index->position.posY<<std::endl;
         index = index->next;
