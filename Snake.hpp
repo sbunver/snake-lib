@@ -44,7 +44,7 @@ class Snake
     Snake(unsigned int gameSize);
     SNAKE_RET Step();
     void SetSnakeDirection(SNAKE_MOVE newDirection);
-    void printSnake();
+    void GetGameBoard(char* gameBoard, unsigned int gameBoardSize);
     private:
     SNAKE_INTERNAL_RET addSnakeNodeToHead(SnakePoint& point);
     bool isNextStepValid(SnakePoint& newPoint);

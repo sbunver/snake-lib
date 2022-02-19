@@ -273,14 +273,22 @@ void Snake::SetSnakeDirection(SNAKE_MOVE newDirection)
     return; 
 }
 
-void Snake::printSnake()
+void Snake::GetGameBoard(char* gameBoard, unsigned int gameBoardSize)
 {
-    SnakeNode* index = this->head;
-    while(index != 0)
+    if(gameBoardSize == (this->size * this->size))
     {
-        std::cout<<index->position.posX<<" "<<index->position.posY<<std::endl;
-        index = index->next;
+        SnakeNode* index = this->head;
+
+        memset(gameBoard, ' ', sizeof(char) * gameBoardSize);
+        while(index != 0)
+        {
+            gameBoard[(index->position.posX * this->size) + index->position.posY] = 'X';
+            index = index->next;
+        }
+
+        gameBoard[(this->mouse.posX * this->size) + this->mouse.posY] = 'O';
     }
-    std::cout<<"Mouse : "<<this->mouse.posX<<" "<<this->mouse.posY<<std::endl;
-    std::cout<<std::endl;
+
+    return;
 }
+
