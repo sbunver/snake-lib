@@ -18,6 +18,7 @@ Snake::Snake(unsigned int gameSize)
     this->size = gameSize;
     this->mouse.posX = 0;
     this->mouse.posY = 5;
+    this->internalErr = SNAKE_INTERNAL_RET_UNDEFINED;
     
     // Add first 3 body part of snake
     SnakePoint p;
@@ -173,11 +174,23 @@ bool Snake::isMouseEaten(const SnakePoint& newPoint)
     return ret;
 }
 
+void Snake::reportSnakeInternalError(SNAKE_INTERNAL_RET err)
+{
+    this->internalErr = err;
+}
+
+SNAKE_INTERNAL_RET Snake::getSnakeInternalError()
+{
+    return this->internalErr;
+}
+
 SNAKE_RET Snake::Step()
 {
     SNAKE_RET ret = SNAKE_RET_UNDEFINED;
     SNAKE_INTERNAL_RET internalRet = SNAKE_INTERNAL_RET_UNDEFINED;
     SnakePoint newPoint;
+
+    reportSnakeInternalError(internalRet); // Reset internal error
 
     memset(&newPoint, 0, sizeof(SnakePoint));
     internalRet = calcNextStep(newPoint);
@@ -199,7 +212,7 @@ SNAKE_RET Snake::Step()
                     else
                     {
                         ret = SNAKE_RET_UNDEFINED;
-                        // TODO Report internal error to a function
+                        reportSnakeInternalError(internalRet);
                     }
                 }
                 else
@@ -211,7 +224,7 @@ SNAKE_RET Snake::Step()
             else
             {
                 ret = SNAKE_RET_UNDEFINED;
-                // TODO Report internal error to a function
+                reportSnakeInternalError(internalRet);
             }        
         }
         else
@@ -222,7 +235,7 @@ SNAKE_RET Snake::Step()
     else
     {
         ret = SNAKE_RET_UNDEFINED;
-        // TODO Report internal error to a function
+        reportSnakeInternalError(internalRet);
     }
 
     return ret;

@@ -52,11 +52,14 @@ class Snake
     bool isBiteItself(const SnakePoint& searchPoint);
     SNAKE_INTERNAL_RET deleteLastNode();
     bool isMouseEaten(const SnakePoint& newPoint);
+    void reportSnakeInternalError(SNAKE_INTERNAL_RET err);
+    SNAKE_INTERNAL_RET getSnakeInternalError();
     SnakeNode* head;
     SnakeNode* tail;
     SNAKE_MOVE moveDirection;
     unsigned int size;
     SnakePoint mouse;
+    SNAKE_INTERNAL_RET internalErr;
 };
 
 #endif
